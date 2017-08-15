@@ -15,4 +15,8 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
         <flow-ref name="sayHello" doc:name="sayHello"/>
         <munit:assert-true message="FAILED: Expected payload's datatype to be Java String, but found #[payload.getClass().getName()]" condition="#[payload is java.lang.String]" doc:name="Assert True: Validate Payload's datatype as Java String"/>
     </munit:test>
+    <munit:test name="sayHello_FnameReturnsShri_True" description="Test">
+        <flow-ref name="sayHello" doc:name="Flow-ref to sayHello"/>
+        <munit:assert-on-equals message="Expected fname to contain Shri but found #[flowVars.fname] instead" expectedValue="#['Shri']" actualValue="#[flowVars.fname]" doc:name="Assert Equals fname=Shri"/>
+    </munit:test>
 </mule>
