@@ -10,6 +10,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     
     <flow name="mavenFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/hello" allowedMethods="GET" doc:name="HTTP"/>
-        <set-payload value="#['Hello Maven']" doc:name="Set Payload"/>
+        <set-property propertyName="#['Content-Type']" value="#['application/json']" doc:name="Property"/>
+        <set-payload value="#['Hello Maven']" doc:name="Set Payload" mimeType="application/json"/>
     </flow>
 </mule>
