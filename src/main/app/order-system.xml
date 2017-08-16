@@ -21,6 +21,13 @@ http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/cu
 }]]></dw:set-payload>
         </dw:transform-message>
         <ws:consumer config-ref="Web_Service_Consumer" operation="provisionOrder" doc:name="Web Service Consumer"/>
+        <dw:transform-message doc:name="XML Repeating Structure to Java Array List">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://soap.training.mulesoft.com/
+---
+payload.ns0#provisionOrderResponse.*return]]></dw:set-payload>
+        </dw:transform-message>
     </flow>
     <flow name="processOrders">
         <set-variable variableName="orders" value="#[payload]" doc:name="Variable: Store orders"/>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+    <munit:config name="munit" doc:name="MUnit configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath:order-system.xml"/>
+        <spring:import resource="classpath:global.xml"/>
+    </spring:beans>
+    <munit:test name="retrieveOrder_payloadTypeIsJavaList" description="Calling retrieve orders flow returns payload of type Java List">
+        <mock:when messageProcessor=".*:.*" doc:name="Mock: Order Service response">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Web Service Consumer']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[getResource('orderResponse.xml').asString()]" mimeType="application/xml"/>
+        </mock:when>
+        <munit:set payload="#[]" doc:name="Set Message: set Query param &quot;timeFrame&quot;">
+            <munit:inbound-properties>
+                <munit:inbound-property key="http.query.params" value="#[{ 'timeFrame':'all' }]"/>
+            </munit:inbound-properties>
+        </munit:set>
+        <flow-ref name="retriveOrders" doc:name="retriveOrders"/>
+        <munit:assert-true message="FAILED:  Expected payload's datatype to be Java List, but found #[payload.getClass().getName()] instead!!" condition="#[payload is java.util.List]" doc:name="Assert True: Payload datatype is Java List"/>
+    </munit:test>
+</mule>
