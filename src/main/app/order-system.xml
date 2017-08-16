@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 ---
 {
     international: flowVars.orders filter $.'location' == 'worldwide',
-    domestic: []
+    domestic: flowVars.orders filter $.'location' == 'national'
 }]]></dw:set-payload>
         </dw:transform-message>
     </flow>
